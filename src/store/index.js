@@ -1,12 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import router from "../router";
 
 Vue.use(Vuex);
 
-function redirectUser(){
-  return router.push("/");
- };
 
 export default new Vuex.Store({
   state: {
@@ -14,15 +10,8 @@ export default new Vuex.Store({
     donantes: null,
     details: null,
   },
-  getters: {
-    getStatusUser: state =>  state.user.is_admin
-},
   mutations: {
     SET_USER_DATA(state, data) {
-      console.log(data.usuario.is_admin)
-      if (data.usuario.is_admin == 0) {
-        redirectUser()
-      }
       state.user = data.usuario;
       localStorage.setItem("user", JSON.stringify(data.usuario));
       localStorage.setItem("token", JSON.stringify(data.token));
@@ -50,64 +39,96 @@ export default new Vuex.Store({
     },
     WRITE_DETAILS(state, data) {
       state.details = data;
-     
+
     },
   },
+  getters: {
+    getUser: state => {
+      return state.user
+    }
+  },
   actions: {
-    register({ commit }, credentials) {
-      return apiClient.post("/api/register", credentials).then(({ data }) => {
+    register({
+      commit
+    }, credentials) {
+      return apiClient.post("/api/register", credentials).then(({
+        data
+      }) => {
         commit("SET_USER_DATA", data);
       });
     },
-    login({ commit }, credentials) {
-      return apiClient.post("/api/login", credentials).then(({ data }) => {
+    login({
+      commit
+    }, credentials) {
+      return apiClient.post("/api/login", credentials).then(({
+        data
+      }) => {
         commit("SET_USER_DATA", data);
       });
     },
-    logout({ commit }) {
+    logout({
+      commit
+    }) {
       return apiClient.get("/api/logout").then(() => {
         commit("LOGOUT");
       });
     },
-    getDonantes({ commit }) {
-      return apiClient.get("/api/donantes").then(({ data }) => {
+    getDonantes({
+      commit
+    }) {
+      return apiClient.get("/api/donantes").then(({
+        data
+      }) => {
         commit("GET_DONANTES", data);
       });
     },
     //buscar por dodcumento
-    byDocument({ commit }, document) {
+    byDocument({
+      commit
+    }, document) {
       return apiClient
-        .post("/api/donantes/byDocument", { documento: document })
-        .then(({ data }) => {
+        .post("/api/donantes/byDocument", {
+          documento: document
+        })
+        .then(({
+          data
+        }) => {
           commit("BUSCAR_DONANTES", data);
         });
     },
     //mandar petición de cambios de datos
-    requestDonantesInfo({ commit }, tmp) {
+    requestDonantesInfo({
+      commit
+    }, tmp) {
       return apiClient
-        .post("/api/donantes/request/" + tmp.id, { details: tmp.details })
-        .then(({ data }) => {
+        .post("/api/donantes/request/" + tmp.id, {
+          details: tmp.details
+        })
+        .then(({
+          data
+        }) => {
           commit("WRITE_DETAILS", data);
         });
     },
-    request({ commit }) {
+    request({
+      commit
+    }) {
       return apiClient
         .get("/api/donantes/request")
-        .then(({ data }) => {
+        .then(({
+          data
+        }) => {
           console.log(data)
-           commit("WRITE_DETAILS", data);
+          commit("WRITE_DETAILS", data);
         });
     },
-   
-    updateStateUser({      commit
-    }, credentials) {
-      return apiClient
-        .get('/api/refresh', credentials)
-        .then(({
-          data, 
-        }) => {
+
+    updateStateUser({
+      commit
+    }) {
+      return apiClient.get('/api/refresh').then(({ data }) => {
           commit('REFRESH_USER', data)
-        })
+      })
     },
     logout({
       commit

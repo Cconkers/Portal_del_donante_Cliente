@@ -1,11 +1,10 @@
 <template>
   <v-app>
     <v-navigation-drawer
-      style="display: flex; position: fixed; background-color: #dc001b"
+      style="z-index:0; display: flex; position: fixed; background-color: #dc001b"
       height="100%"
       v-model="drawer"
       absolute
-      temporary
       app
     >
       <v-list nav dense>
@@ -21,14 +20,54 @@
             />
           </v-list-item>
 
-          <v-main></v-main>
-
-          <v-list-item class="menu-link">
+          <v-list-item v-if="this.$store.state.user.is_admin">
             <v-list-item-icon>
               <i
-                class="far fa-user"
+                class="fas fa-house-user"
+                style="font-size: 22px; color:white"
+              ></i>
+            </v-list-item-icon>
+            <router-link
+              style="color: white; font-family: MONTSERRAT"
+              :to="{ path: '/BuscarDonantes' }"
+              >Buscar Donantes</router-link
+            >
+          </v-list-item>
+
+          <v-list-item v-if="this.$store.state.user.is_admin">
+            <v-list-item-icon>
+              <i
+                class="fas fa-bullhorn"
                 style="font-size: 22px; color: white"
               ></i>
+            </v-list-item-icon>
+            <router-link
+              style="color: white; font-family: MONTSERRAT"
+              :to="{ name: 'ComunicadosAdmin' }"
+              >Comunicados</router-link
+            >
+          </v-list-item>
+
+          <v-list-item v-if="this.$store.state.user.is_admin">
+            <v-list-item-icon>
+              <i
+                class="far fa-file-alt"
+                style="font-size: 22px; color: white"
+              ></i>
+            </v-list-item-icon>
+            <router-link
+              style="color: white; font-family: MONTSERRAT"
+              :to="{ name: 'Peticion' }"
+              >Peticiones</router-link
+            >
+          </v-list-item>
+
+          <v-list-item
+            class="menu-link"
+            v-if="!this.$store.state.user.is_admin"
+          >
+            <v-list-item-icon>
+              <i class="far fa-user" style="font-size: 22px; color: white"></i>
             </v-list-item-icon>
             <router-link
               style="color: white; font-family: MONTSERRAT"
@@ -37,7 +76,10 @@
             >
           </v-list-item>
 
-          <v-list-item class="menu-link">
+          <v-list-item
+            class="menu-link"
+            v-if="!this.$store.state.user.is_admin"
+          >
             <v-list-item-icon>
               <i
                 class="far fa-newspaper"
@@ -51,7 +93,12 @@
             >
           </v-list-item>
 
-          <v-list-item class="menu-link" v-show="this.$store.state.user.estado">
+          <v-list-item
+            class="menu-link"
+            v-show="
+              this.$store.state.user.estado && !this.$store.state.user.is_admin
+            "
+          >
             <v-list-item-icon>
               <i
                 class="fas fa-bullhorn"
@@ -66,7 +113,12 @@
             >
           </v-list-item>
 
-          <v-list-item class="menu-link" v-show="this.$store.state.user.estado">
+          <v-list-item
+            class="menu-link"
+            v-show="
+              this.$store.state.user.estado && !this.$store.state.user.is_admin
+            "
+          >
             <v-list-item-icon>
               <i class="fas fa-hands" style="font-size: 22px; color: white"></i>
             </v-list-item-icon>
@@ -77,7 +129,12 @@
             >
           </v-list-item>
 
-          <v-list-item class="menu-link" v-show="this.$store.state.user.estado">
+          <v-list-item
+            class="menu-link"
+            v-if="
+              this.$store.state.user.estado && !this.$store.state.user.is_admin
+            "
+          >
             <v-list-item-icon>
               <i
                 class="fas fa-hand-holding-usd"
@@ -91,8 +148,10 @@
             >
           </v-list-item>
 
-         
-          <v-list-item class="menu-link">
+          <v-list-item
+            class="menu-link"
+            v-if="!this.$store.state.user.is_admin"
+          >
             <v-list-item-icon>
               <i class="far fa-bell" style="font-size: 22px; color: white"></i>
             </v-list-item-icon>
@@ -103,7 +162,10 @@
             >
           </v-list-item>
 
-          <v-list-item class="menu-link">
+          <v-list-item
+            class="menu-link"
+            v-if="!this.$store.state.user.is_admin"
+          >
             <v-list-item-icon>
               <i
                 class="fas fa-question"
@@ -141,19 +203,27 @@
     </v-navigation-drawer>
 
     <v-app-bar color="#DC001B" app>
-      <v-app-bar-nav-icon @click="drawer = true">
+      <v-app-bar-nav-icon @click="drawer = false">
         <i
           class="fas fa-align-justify"
           style="font-size: 30px; color: white"
         ></i>
       </v-app-bar-nav-icon>
-      <v-btn text @click="$vuetify.theme.dark = !$vuetify.theme.dark">
-        <i class="far fa-eye" style="font-size: 20px; color: white"></i>
-      </v-btn>
-      <v-toolbar-title style="color: white; font-family: MONTSERRAT">
-        {{
-            this.$store.state.user.donante.name
-        }}
+      <v-btn text @click="$vuetify.theme.dark = !$vuetify.theme.dark, changeIcon()">
+       <v-icon>{{ lightDark }}</v-icon>
+       </v-btn>
+
+      <v-toolbar-title
+        style=" z-index: 1; weight: 100%; font-family: MONTSERRAT; color: white"
+        v-if="this.$store.state.user.is_admin"
+        >Administrador</v-toolbar-title
+      >
+
+      <v-toolbar-title
+        style="color: white; font-family: MONTSERRAT"
+        v-if="!this.$store.state.user.is_admin"
+      >
+        {{ this.$store.state.user.donante.name }}
       </v-toolbar-title>
     </v-app-bar>
 
@@ -174,31 +244,42 @@ Vue.use(Vuetify);
 import Vue from "vue";
 import Vuetify from "vuetify/lib";
 
-
 export default {
-  created(){
-      this.$store.dispatch('updateStateUser')
+  created() {
+      this.$store.dispatch("updateStateUser");
   },
+    data: () => ({
+    drawer: true,
+    group: null,
+    lightDark: 'fa-moon'
+  }),
   methods: {
+    changeIcon(){
+      console.log('HOLAAA')
+      if(this.lightDark = 'fa-moon'){
+        this.lightDark = 'fa-sun'
+      }else{
+        this.lightDark = 'fa-moon'
+      }
+    },
     logout() {
       this.$store
         .dispatch("logout")
         .then(() => {
-          this.$router.push("/");
+          this.$router.push("/login");
         })
         .catch((err) => {
           console.log(err);
         });
     },
   },
-  data: () => ({
-    drawer: false,
-    group: null,
-  }),
 };
 </script>
 
-<style>
+<style scoped>
+*{
+  box-shadow: none!important;
+}
 a:link,
 a:visited,
 a:active {
@@ -212,6 +293,4 @@ a:active {
 .mr-2 {
   color: white;
 }
-
-
 </style>

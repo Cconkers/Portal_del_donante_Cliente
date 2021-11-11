@@ -135,11 +135,6 @@ export default {
     };
   },
   methods: {
-    redirectToRegister() {
-      this.$router.push({
-        path: "/",
-      });
-    },
     login() {
       let data = {
         is_admin: "",
@@ -155,7 +150,7 @@ export default {
             title: "Inicio de sesión correcto",
             type: "success",
           }).then(() => {
-            window.location.reload();
+            this.$router.push('/')
           });
         })
         .catch((err) => {

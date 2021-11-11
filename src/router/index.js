@@ -1,37 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import index from '../store/index.js';
-Vue.use(VueRouter)
+import store from '../store/index.js';
 
 Vue.use(VueRouter);
 
 const routes = [{
-    path: '/admin',
-    name: 'admin',
-    component: () => import('../layout/DashboardAdmin.vue'),
-    children: [{
-        path: '/comunicadosAdmin',
-        name: 'ComunicadosAdmin',
-        component: () => import('../views/ComunicadosAdmin.vue'),
-      },
-      {
-        path: '/admin',
-        name: 'BuscarDonantes',
-        component: () => import('../views/BuscarDonantes.vue'),
-      },
-      {
-        path: '/Peticion',
-        name: 'Peticion',
-        component: () => import('../views/Peticion.vue'),
-      },
-    ]
-  },
-  {
     path: '/login',
     name: 'Login',
     component: () => import( /* webpackChunkName: "Login" */ '../views/Login.vue'),
   },
-
   {
     path: '/forgot',
     name: 'ForgotPassword',
@@ -42,7 +19,6 @@ const routes = [{
     name: "Register",
     component: () => import("../views/Register.vue"),
   },
-
   {
     path: '/',
     name: 'DashboardLayout',
@@ -59,12 +35,38 @@ const routes = [{
         },
       },
       {
+        path: '/BuscarDonantes',
+        name: 'BuscarDonantes',
+        component: () => import('../views/BuscarDonantes.vue'),
+        meta: {
+          requiresAuth: true,
+          isAdmin: true
+        },
+      },
+      {
+        path: '/comunicadosAdmin',
+        name: 'ComunicadosAdmin',
+        component: () => import('../views/ComunicadosAdmin.vue'),
+        meta: {
+          requiresAuth: true,
+          isAdmin: true
+        },
+      },
+      {
+        path: '/Peticion',
+        name: 'Peticion',
+        component: () => import('../views/Peticion.vue'),
+        meta: {
+          requiresAuth: true,
+          isAdmin: true
+        },
+      },
+      {
         path: '/comunicados',
         name: 'Comunicados',
         component: () => import( /* webpackChunkName: "Comunicados" */ '../views/Comunicados.vue'),
         meta: {
           requiresAuth: true,
-          isadmin: true
         },
       },
       {
@@ -82,17 +84,14 @@ const routes = [{
         component: () => import( /* webpackChunkName: "Donaciones" */ '../views/Donaciones.vue'),
         meta: {
           requiresAuth: true
-           }
-        },
-    
-      
-     
+        }
+      },
+
       {
         path: '/donacionesPuntuales',
         name: 'DonacionesPuntuales',
         component: () => import( /* webpackChunkName: "DonacionesPuntuales" */ '../views/DonacionesPuntuales.vue'),
       },
-
       {
         path: '/preguntas',
         name: 'Preguntas',
@@ -107,7 +106,7 @@ const routes = [{
         name: 'News',
         component: () => import( /* webpackChunkName: "Profile" */ '../views/News.vue'),
         meta: {
-          requiresAuth: true
+          requiresAuth: true,
         },
       },
     ],
@@ -116,7 +115,7 @@ const routes = [{
     path: "/:CatchAll(.*)",
     name: "NotFound",
     component: () =>
-      import(/* webpackChunkName: "NotFound" */ "../views/NotFound.vue"),
+      import( /* webpackChunkName: "NotFound" */ "../views/NotFound.vue"),
   },
 ];
 
@@ -127,15 +126,19 @@ const router = new VueRouter({
 });
 
 
-let loggedIn = !localStorage.getItem('user') || !localStorage.getItem('token')
+
+
 
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth) && loggedIn) {
-    router.push('/login')
-    index.updateStateUser
-  } else {
+
+  const loggedIn = !localStorage.getItem('user') || !localStorage.getItem('token');
+  const reqAuth = to.matched.some(record => record.meta.requiresAuth);
+  const reqAdmin = to.matched.some(record => record.meta.isAdmin);
+  const user = localStorage.getItem('user');
+
+    if (loggedIn && reqAuth) next({ name: 'Login' })
+    // if the user is not authenticated, `next` is called twice
     next()
-  }
-})
+});
 export default router
