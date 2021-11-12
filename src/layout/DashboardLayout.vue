@@ -14,7 +14,7 @@
         >
           <v-list-item>
             <img
-              style="display: block; margin: auto"
+              style="display: block; margin: auto;"
               src="../assets/imagotipo_vertical_fondos policromáticos_RGB.png"
               width="50%"
             />
@@ -155,6 +155,7 @@
             <v-list-item-icon>
               <i class="far fa-bell" style="font-size: 22px; color: white"></i>
             </v-list-item-icon>
+
             <router-link
               style="color: white; font-family: MONTSERRAT"
               :to="{ path: 'Notificaciones' }"
@@ -182,20 +183,18 @@
           <v-list-item class="menu-link">
             <v-list-item-icon>
               <i
-                class="far fa-times-circle"
+                class="fas fa-sign-out-alt"
                 style="font-size: 22px; color: white"
               ></i>
             </v-list-item-icon>
-            <v-btn
+            <router-link
               @click="logout"
+              :to="{ path: 'Login' }"
               style="
                 color: white;
-                margin-left: -16px;
-                border-bottom: 3px solid white;
-                background-color: #dc001b;
                 font-family: MONTSERRAT;
               "
-              >Cerrar Sesion</v-btn
+              >Cerrar Sesion</router-link
             >
           </v-list-item>
         </v-list-item-group>
@@ -209,9 +208,12 @@
           style="font-size: 30px; color: white"
         ></i>
       </v-app-bar-nav-icon>
-      <v-btn text @click="$vuetify.theme.dark = !$vuetify.theme.dark, changeIcon()">
-       <v-icon>{{ lightDark }}</v-icon>
-       </v-btn>
+      <v-btn
+        text
+        @click="($vuetify.theme.dark = !$vuetify.theme.dark), changeIcon()"
+      >
+        <v-icon :class="lightDark"></v-icon>
+      </v-btn>
 
       <v-toolbar-title
         style=" z-index: 1; weight: 100%; font-family: MONTSERRAT; color: white"
@@ -246,20 +248,22 @@ import Vuetify from "vuetify/lib";
 
 export default {
   created() {
-      this.$store.dispatch("updateStateUser");
+    this.$store.dispatch("updateStateUser");
   },
-    data: () => ({
+  data: () => ({
     drawer: true,
     group: null,
-    lightDark: 'fa-moon'
+    lightDark: "fas fa-sun",
   }),
   methods: {
-    changeIcon(){
-      console.log('HOLAAA')
-      if(this.lightDark = 'fa-moon'){
-        this.lightDark = 'fa-sun'
-      }else{
-        this.lightDark = 'fa-moon'
+    changeIcon() {
+      let lightDarkIcon = document.getElementsByTagName('svg')[9];
+      if (lightDarkIcon.classList.contains("fa-moon")) {
+        lightDarkIcon.classList.remove("fa-moon");
+        lightDarkIcon.classList.add("fa-sun");
+      } else {
+        lightDarkIcon.classList.remove("fa-sun");
+        lightDarkIcon.classList.add("fa-moon");
       }
     },
     logout() {
@@ -277,18 +281,37 @@ export default {
 </script>
 
 <style scoped>
-*{
-  box-shadow: none!important;
+* {
+  box-shadow: none !important;
 }
 a:link,
 a:visited,
 a:active {
   text-decoration: none;
 }
-.menu-link:hover {
-  background-color: rgb(236, 155, 155);
+.v-list-item--link::before {
+  transform: scaleX(0) !important;
+  transform-origin: bottom right !important;
+  opacity: 100% !important;
 }
-
+.v-list-item--link:hover::before {
+  transform: scaleX(1) !important;
+  transform-origin: bottom left !important;
+  border-radius: 0px;
+}
+.v-list-item--link::before {
+  content: " " !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  inset: 0 0 0 0 !important;
+  background: rgb(255, 123, 123);
+  z-index: -1 !important;
+  transition: transform 0.5s ease !important;
+}
 /* modo dark */
 .mr-2 {
   color: white;

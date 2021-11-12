@@ -1,12 +1,14 @@
 <template>
   <v-row justify="center">
-    <br /><br />
+
     <v-dialog class="modale" v-model="dialog" persistent max-width="600px">
+
       <template v-slot:activator="{ on, attrs }">
         <v-btn color="red" dark v-bind="attrs" v-on="on">
-          Enviar Modificación de datos 🖊
+          Enviar
         </v-btn>
       </template>
+
       <v-card>
         <v-card-title>
           <span class="text-h5"> SOLICITUD DE CAMBIO DE DATOS</span>

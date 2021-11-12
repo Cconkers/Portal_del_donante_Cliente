@@ -1,210 +1,151 @@
 <template>
   <div>
-    <Modal></Modal>
+    <v-row justify="space-around">
+      <v-card width="80%">
+        <v-img class="mx-auto" :src="images.banner" max-height="200" max-width="600"></v-img>
 
-<v-row justify="space-around">
-<v-card width="80%">
-    <v-img :src="images.banner" max-height="200" max-width="600"> </v-img>
-    <v-list>
-      <!-- Nombre y Apellido-->
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="indigo">
-            mdi-account
-          </v-icon>
-        </v-list-item-icon>
+        <v-form>
+          <v-container class="d-flex flex-column">
+            <v-row>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.donante.name"
+                  label="Nombre"
+                  hint="Cambiar nombre"
+                  outline
+                ></v-text-field>
+              </v-col>
 
-        <v-list-item-content>
-          <v-list-item-title>Nombre</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.donante.name
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-          </v-list>
-              <v-list>
-      <v-divider></v-divider>
-    <v-list-item>
-        <v-list-item-icon class="mr-5">
-          <v-icon color="indigo">
-            mdi-account
-          </v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Apellido</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.donante.lastName
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-    </v-list-item>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.donante.lastName"
+                  label="Apellido"
+                  hint="Cambiar apellido"
+                  outline
+                ></v-text-field>
+              </v-col>
 
-      <v-divider></v-divider>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.email"
+                  label="Correo Electrónico"
+                  outline
+                ></v-text-field>
+              </v-col>
 
-      <v-list-item>
-        <v-list-item-icon class="mr-5">
-          <v-icon color="indigo">
-            mdi-email
-          </v-icon>
-        </v-list-item-icon>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.donante.phoneNumber"
+                  label="Teléfono móvil"
+                  hint="Cambiar número de teléfono móvil"
+                  outline
+                ></v-text-field>
+              </v-col>
 
-        <v-list-item-content>
-          <v-list-item-title>Correo Electrónico</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.email
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider></v-divider>
-      <!-- Teléfono móvil -->
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="indigo">
-            mdi-cellphone
-          </v-icon>
-        </v-list-item-icon>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.donante.phoneNumber2"
+                  label="Teléfono fijo"
+                  hint="Cambiar número de teléfono fijo"
+                  outline
+                ></v-text-field>
+              </v-col>
 
-        <v-list-item-content>
-          <v-list-item-title>Móvil</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.donante.phoneNumber
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.documento"
+                  label="Documento de identidad"
+                  :hint="'Cambiar ' + this.$store.state.user.tipoDocumento"
+                  outline
+                ></v-text-field>
+              </v-col>
 
-        <!-- Teléfono fijo -->
-        <v-list-item-icon class="mr-5">
-          <v-icon color="indigo">
-            mdi-phone-classic
-          </v-icon>
-        </v-list-item-icon>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.donante.direccion"
+                  label="Dirección"
+                  hint="Cambiar dirección"
+                  outline
+                ></v-text-field>
+              </v-col>
 
-        <v-list-item-content>
-          <v-list-item-title>Teléfono Fijo</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.donante.phoneNumber2
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.donante.cp"
+                  label="Código Postal"
+                  hint="Cambiar código postal"
+                  outline
+                ></v-text-field>
+              </v-col>
 
-      <v-divider></v-divider>
+              <v-col cols="12" sm="6">
+                <v-select
+                  v-model="tipoCuota"
+                  name="Cuota"
+                  item-text="name"
+                  label="Periodicidad de la cuota"
+                  :items="aportacion"
+                  :hint="
+                    'Actualmente la periodicidad es ' +
+                      this.$store.state.user.donante.tipoCuota
+                  "
+                  persistent-hint
+                  outline
+                ></v-select>
+              </v-col>
 
-      <v-list-item>
-        <!-- DNI -->
-        <v-list-item-icon class="mr-5">
-          <v-icon color="indigo">
-            fa-passport
-          </v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Tipo documento</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.tipoDocumento
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.donante.cuota"
+                  label="Cantidad de cuota en '€' "
+                  :hint="
+                    'Actualmente la couta es ' +
+                      this.$store.state.user.donante.cuota +
+                      '€'
+                  "
+                  persistent-hint
+                  outline
+                ></v-text-field>
+              </v-col>
 
-        <v-list-item-content>
-          <v-list-item-title>Número de documento</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.documento
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider></v-divider>
-      <v-list-item>
-        <!-- Dirección -->
-        <v-list-item-icon class="mr-5">
-          <v-icon color="indigo">
-            mdi-map-marker
-          </v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Direción</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.donante.direccion
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.donante.selectorPais"
+                  label="Pais"
+                  hint="Cambiar país"
+                  outline
+                ></v-text-field>
+              </v-col>
 
-        <v-list-item-content>
-          <v-list-item-title>Código Postal</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.donante.cp
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider></v-divider>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.donante.provincia"
+                  label="Provincia"
+                  hint="Cambiar provincia"
+                  outline
+                ></v-text-field>
+              </v-col>
 
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="indigo">
-            fa-money-check
-          </v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <v-list-item-title>Tipo de cuota</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.donante.tipoCuota
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-
-        <v-list-item-icon class="mr-5">
-          <v-icon color="indigo">
-            mdi-currency-eur
-          </v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <v-list-item-title>Cuota</v-list-item-title>
-          <v-list-item-subtitle
-            >{{ this.$store.state.user.donante.cuota }}€</v-list-item-subtitle
-          >
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="indigo">
-            fa-globe-europe
-          </v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <v-list-item-title>País</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.donante.selectorPais
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-
-        <v-list-item-icon>
-          <v-icon color="indigo">
-            mdi-flag-variant
-          </v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <v-list-item-title>Provincia</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.donante.provincia
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-
-        <v-list-item-icon>
-          <v-icon color="indigo">
-            fa-map-pin
-          </v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <v-list-item-title>Población</v-list-item-title>
-          <v-list-item-subtitle>{{
-            this.$store.state.user.donante.poblacion
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider></v-divider>
-    </v-list>
-    </v-card>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="this.$store.state.user.donante.poblacion"
+                  label="Población"
+                  hint="Cambiar población"
+                  outline
+                ></v-text-field>
+              </v-col>
+              <v-col class="sendChangesBtn" cols="12" sm="6">
+                <p>
+                  Recuerde que se enviará una petición al administrador del
+                  Portal del Donante para efectuar sus cambios en el caso de que
+                  sean aprobados
+                </p>
+                <Modal></Modal>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-form>
+      </v-card>
     </v-row>
   </div>
 </template>
@@ -215,17 +156,43 @@ export default {
   components: {
     Modal,
   },
-  data() {
-    return {
-      images: {
-        banner: require("../assets/banner2.jpg"),
+  data: () => ({
+    tipoCuota: null,
+    cuota: null,
+    selectCuota: null,
+    aportacion: [
+      {
+        id: 0,
+        name: "Mensual",
       },
-    };
-  },
+      {
+        id: 1,
+        name: "Trimestral",
+      },
+      {
+        id: 2,
+        name: "Semestral",
+      },
+      {
+        id: 3,
+        name: "Anual",
+      },
+    ],
+    images: {
+      banner: require("../assets/banner2.jpg"),
+    },
+  }),
 };
 </script>
 
-<style>
+<style scoped>
+.sendChangesBtn {
+  text-overflow: clip;
+  margin: -2% 0% 5% 0%;
+}
+.row {
+  align-items: center;
+}
 .titulo {
   color: white;
 }
